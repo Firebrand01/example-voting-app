@@ -2,6 +2,6 @@
 
  * Build Status
 
-[![Build Status](http://0.0.0.0:8080/buildStatus/icon?job=instavote%2Fworker-test)](http://0.0.0.0:8080/job/instavote/job/worker-test/)
+[![Build Status](https://smee.io/dPkO6FVnqdAhRku/buildStatus/icon?job=instavote%2Fworker-test)](https://smee.io/dPkO6FVnqdAhRku/job/instavote/job/worker-test/)
 
- * Cambio Test 2
+ * Cambio Test 3 13/04/2022
