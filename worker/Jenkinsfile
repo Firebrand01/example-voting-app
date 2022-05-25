@@ -10,6 +10,10 @@ pipeline {
 
     stages {
         stage('build') {
+            when {
+                branch 'master'
+                changeset "**/worket/**"
+            }
             steps {
                 echo 'Compiling worket app'
                 dir('worker') {
@@ -20,12 +24,21 @@ pipeline {
             }
         } 
         stage('test') {
+
+            when {
+                branch 'master'
+                changeset "**/worket/**"
+            }
             steps {
                 echo 'Running Unit Test on worker app'
                 
             }
         } 
         stage('package') {
+            when {
+                branch 'master'
+                changeset "**/worket/**"
+            }
             steps {
                 echo 'Packaging worket app'
                 
