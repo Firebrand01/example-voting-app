@@ -43,6 +43,28 @@ pipeline {
                 
             }
         }
+
+        stage('dockerpackage') {
+            when {
+                branch 'master'
+                changeset "**/worker/**"
+            }
+            steps {
+                echo 'Packaging worket app with docker'
+
+                script{
+                         docker.withRegistry('https://index.docker.io/v1', 'dockerhub') {
+                         def workerImage = docker.build("firebrand01/worker:v${env.BUILD_ID}", "./worker")
+                         workerImage.push()
+                         workerImage.push("${env.BRANCH_NAME}")
+
+      
+                             }
+                }
+                
+            }
+        }
+
     }
     post {
         always {
