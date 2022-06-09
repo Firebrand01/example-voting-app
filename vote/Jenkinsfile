@@ -1,16 +1,19 @@
 
 
 pipeline {
-    agent {
-        docker {
-            image 'python:2.7.16-slim'
-            args '--user root'
-        }
-    }
-    
+  
+    agent none
 
     stages {
         stage('build') {
+
+
+              agent {
+                            docker {
+                                image 'python:2.7.16-slim'
+                                args '--user root'
+                            }
+                        }
 
 
             when{
@@ -33,6 +36,15 @@ pipeline {
                 
                 changeset "**/vote/**"
             }
+
+                  agent {
+                            docker {
+                                image 'python:2.7.16-slim'
+                                args '--user root'
+                            }
+                        }
+
+
             steps {
                 echo 'Running Unit Test on vote app'
                    dir('vote') {
@@ -47,6 +59,11 @@ pipeline {
              stage('docker-package') {
 
             agent any
+
+        when{
+            changeset "**/vote/**"
+           
+          }
       
             steps {
                 echo 'Packaging vote app with docker'
@@ -56,6 +73,7 @@ pipeline {
                          def workerImage = docker.build("firebrand01/worker:v${env.BUILD_ID}", "./vote")
                          workerImage.push()
                          workerImage.push("${env.BRANCH_NAME}")
+                         workerImage.push("latest")
 
       
                              }
