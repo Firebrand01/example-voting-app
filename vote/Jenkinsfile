@@ -30,7 +30,7 @@ pipeline {
                 
             }
         } 
-        stage('test') {
+/*         stage('test') {
 
             when {
                 
@@ -54,7 +54,7 @@ pipeline {
                 }
                 
             }
-        }
+        } */
 
              stage('docker-package') {
 
