@@ -1,48 +1,66 @@
-
-
 pipeline {
-    agent {
-        docker {
-            image 'maven:3.6.1-jdk-8-alpine'
+
+  agent none
+
+  stages{
+      stage("build"){
+        when{
+            changeset "**/worker/**"
+          }
+
+        agent{
+          docker{
+            image 'maven:3.6.1-jdk-8-slim'
             args '-v $HOME/.m2:/root/.m2'
+          }
         }
-    }
-    
 
-
-    stages {
-        stage('build') {
-
-            steps {
-                echo 'Compiling worket app'
-                dir('worker') {
-                    sh 'mvn compile'
-
-                }
-                
-            }
-        } 
-        stage('test') {
-
-            when {
-                branch 'master'
-                changeset "**/worker/**"
-            }
-            steps {
-                echo 'Running Unit Test on worker app'
-                
-            }
-        } 
-        stage('package') {
-            when {
-                branch 'master'
-                changeset "**/worker/**"
-            }
-            steps {
-                echo 'Packaging worket app'
-                
-            }
+        steps{
+          echo 'Compiling worker app..'
+          dir('worker'){
+            sh 'mvn compile'
+          }
         }
+      }
+      stage("test"){
+        when{
+          changeset "**/worker/**"
+        }
+        agent{
+          docker{
+            image 'maven:3.6.1-jdk-8-slim'
+            args '-v $HOME/.m2:/root/.m2'
+          }
+        }
+        steps{
+          echo 'Running Unit Tets on worker app..'
+          dir('worker'){
+            sh 'mvn clean test'
+           }
+
+          }
+      }
+      stage("package"){
+        when{
+          branch 'master'
+          changeset "**/worker/**"
+        }
+        agent{
+          docker{
+            image 'maven:3.6.1-jdk-8-slim'
+            args '-v $HOME/.m2:/root/.m2'
+          }
+        }
+        steps{
+          echo 'Packaging worker app'
+          dir('worker'){
+            sh 'mvn package -DskipTests'
+            archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+          }
+
+        }
+      }
+
 
         stage('dockerpackage') {
       
