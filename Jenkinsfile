@@ -81,7 +81,6 @@ pipeline {
         }
 
 
-     stages {
         stage('result build') {
 
 
@@ -134,9 +133,9 @@ pipeline {
                 }
                 
             }
-        } 
+         
 
-        stages {
+     
         stage('vote build') {
 
 
@@ -212,7 +211,7 @@ pipeline {
             }
         }  
         
-    }
+    
 
         
     }
